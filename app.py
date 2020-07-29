@@ -10,22 +10,30 @@ app = Flask(__name__)
 with open('./login_details.txt') as f:
     email, password = f.read().split()
 
+
+emails = []
+with open("./email_list.txt", newline='\n') as f:
+    for x in f:
+        emails.append(x)
+
 msg = EmailMessage()
 msg['Subject'] = 'Daily updates of the Covid-19 cases'
 msg["From"] = f'Covid-19 stats <{email}>'
-msg['To'] = 'srikar1awesome@gmail.com'
+msg['To'] = ", ".join(emails)
 
 
 def error_occured(error):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as stmp:
-        msg['Subject'] = 'Alert📢 something wrong happened'
-        msg['To'] = 'srikar1awesome@gmail.com'
-        msg.set_content("The error:", error)
+        msgs = EmailMessage()
+        msgs['Subject'] = 'Alert📢 something wrong happened'
+        msgs['From'] = f'Covid-19 stats <{email}>'
+        msgs['To'] = 'srikar1awesome@gmail.com'
+        msg.set_content(f"The error:{error}")
         stmp.login(email, password)
         stmp.send_message(msg)
 
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def home():
     daily_cases_url = 'https://api.covid19india.org/data.json'
     india_all_cases = 'http://covid-19india-api.herokuapp.com/all'
@@ -47,7 +55,7 @@ def home():
 
         stmp.send_message(msg)
 
-    return "<h1>Done<h1>"
+    return "<h1 style='font-style:italic;color: #3e474b; text-align:center;'>Done<h1>"
 
 
 if __name__ == "__main__":

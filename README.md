@@ -37,3 +37,8 @@ The program will send a mail to a list of recievers when the url of the hosted p
 
 # Sample picture of the mail
 ![A screenshot of the mail](https://i.imgur.com/1NkwYxK.png)
+
+
+### API used:
+* https://api.covid19india.org
+* http://covid-19india-api.herokuapp.com

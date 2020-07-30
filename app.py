@@ -1,9 +1,10 @@
 from flask import Flask
 from stats_extractor import get_all_cases
 import smtplib
-from email.message import EmailMessage
-from plaintext import plain_text
-from formatted_html import html_format
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from Formatted_text.formatted_html import html_format
+from Formatted_text.plaintext import plain_text
 
 app = Flask(__name__)
 
@@ -12,25 +13,15 @@ with open('./login_details.txt') as f:
 
 
 emails = []
-with open("./email_list.txt", newline='\n') as f:
+with open("./Formatted_text/email_list.txt", newline='\n') as f:
     for x in f:
         emails.append(x)
 
-msg = EmailMessage()
+
+msg = MIMEMultipart('alternative')
 msg['Subject'] = 'Daily updates of the Covid-19 cases'
 msg["From"] = f'Covid-19 stats <{email}>'
 msg['To'] = ", ".join(emails)
-
-
-def error_occured(error):
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as stmp:
-        msgs = EmailMessage()
-        msgs['Subject'] = 'Alert📢 something wrong happened'
-        msgs['From'] = f'Covid-19 stats <{email}>'
-        msgs['To'] = 'srikar1awesome@gmail.com'
-        msg.set_content(f"The error:{error}")
-        stmp.login(email, password)
-        stmp.send_message(msg)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -43,13 +34,15 @@ def home():
         try:
             cases_data = get_all_cases(
                 daily_cases_url, india_all_cases, golabl_cases_url)
-            text = plain_text(cases_data)
-            msg.set_content(text)
-            msg.add_alternative(html_format(cases_data), subtype="html")
         except Exception as e:
-            error_occured(e)
-            text = "We are sorry dear consumer due to some technical difficulties we are not able to deliver your updates today."
-            msg.set_content(text)
+            return f"Alert:{e}"
+        text = plain_text(cases_data)
+        txt_part = MIMEText(text, 'plain')
+        msg.attach(txt_part)
+
+        html = html_format(cases_data)
+        html_part = MIMEText(html, 'html')
+        msg.attach(html_part)
 
         stmp.login(email, password)
 

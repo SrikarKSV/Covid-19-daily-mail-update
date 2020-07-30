@@ -9,7 +9,7 @@ from Formatted_text.plaintext import plain_text
 app = Flask(__name__)
 
 # Getting the login detils
-with open('./login_details1.txt') as f:
+with open('./login_details.txt') as f:
     email, password = f.read().split()
     print(email, password)
 

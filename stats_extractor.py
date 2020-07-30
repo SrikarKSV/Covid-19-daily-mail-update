@@ -1,4 +1,5 @@
 import requests
+from datetime import date
 
 
 daily_cases_url = 'https://api.covid19india.org/data.json'
@@ -12,6 +13,7 @@ def get_all_cases(url1, url2, url3):
     daily_cases = r.json()['cases_time_series']
     todays_cases = daily_cases[-1]
     cases_data = dict()
+    cases_data['date'] = str(date.today())
     cases_data['dailyconfirmed'] = todays_cases['dailyconfirmed']
     cases_data['dailydeceased'] = todays_cases['dailydeceased']
     cases_data['dailyrecovered'] = todays_cases['dailyrecovered']

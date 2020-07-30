@@ -1,13 +1,14 @@
 def plain_text(cases_data):
     msg = f"""
     Daily updates for Covid-19 cases:
+        Date: {cases_data['date']}
         Country: India
             Last 24 hours:
             Confirmed cases in last 24 hours:   {int(cases_data['dailyconfirmed']):,}
             Recoveries in last 24 hours:    {int(cases_data['dailyrecovered']):,}
             Deaths in last 24 hours:    {int(cases_data['dailydeceased']):,}
 
-            Total:
+            Summary:
             Total cases:    {int(cases_data['totalconfirmed']):,}
             Active cases:   {int(cases_data['active_cases']):,}
             Active cases rate:   {cases_data['active_rate']}

@@ -28,6 +28,7 @@ The program will send a mail to a list of recievers when the url of the hosted p
 6) Total deaths
 7) Death rate
 
+
 ## How it works?
 1) Put the list of recievers mail-id in `Formatted/email_list.txt`.
 2) Enter the login details of the sender in `./login_details.txt`.
